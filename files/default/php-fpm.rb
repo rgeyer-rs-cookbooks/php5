@@ -50,7 +50,7 @@ def outputstats(now)
   response = Net::HTTP.get_response(uri)
   hostname = @options[:instanceid]
 
-  metrics = response.body.to_a
+  metrics = response.body.split("\n")
 
   metrics.each do |metric|
     key_val_ary = metric.split(':')

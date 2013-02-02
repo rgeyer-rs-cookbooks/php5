@@ -1,4 +1,5 @@
 default[:php5][:module_list]        = ""
+default[:php5][:server_usage]       = "dedicated"
 default[:php5_fpm][:listen]         = "socket"
 default[:php5_fpm][:listen_socket]  = "/var/run/php5-fpm.sock"
 default[:php5_fpm][:listen_ip]      = "127.0.0.1"

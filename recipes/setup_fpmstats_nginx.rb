@@ -25,19 +25,24 @@ include_recipe "php5::setup_fpm_nginx"
 rightscale_enable_collectd_plugin "exec"
 rightscale_monitor_process node[:php5_fpm][:service_name]
 
-nginx_conf = ::File.join(node[:nginx][:dir], "sites-available", "#{node[:hostname]}.d", "php5-fpm-stats.conf")
+nginx_conf = ::File.join(node[:nginx][:dir], "conf.d", "php5-fpm-stats.conf")
 nginx_collectd_conf = ::File.join(node[:rightscale][:collectd_plugin_dir], "php5-fpm.conf")
 
 listen_str = node[:php5_fpm][:listen] == "socket" ? "unix:#{node[:php5_fpm][:listen_socket]}" : "#{node[:php5_fpm][:listen_ip]}:#{node[:php5_fpm][:listen_port]}"
 
 file nginx_conf do
   content <<-EOF
-location /fpm_status {
-  access_log off;
-  fastcgi_pass #{listen_str};
-  include /etc/nginx/fastcgi_params;
-  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-  fastcgi_param SERVER_PROTOCOL  $server_protocol;
+server {
+  listen 88;
+  server_name localhost;
+
+  location /fpm_status {
+    access_log off;
+    fastcgi_pass #{listen_str};
+    include /etc/nginx/fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param SERVER_PROTOCOL  $server_protocol;
+  }
 }
   EOF
   notifies :restart, resources(:service => "nginx"), :immediately

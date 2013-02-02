@@ -17,5 +17,5 @@
 
 <Plugin exec>
   #    userid    plugin executable                   plugin args
-  Exec "<%= node[:nginx][:user] %>" "<%= node[:rightscale][:collectd_lib] %>/plugins/php-fpm" "-d" "<%= node[:rightscale][:instance_uuid] %>" "-n" 10 "-u" "http://<%= node[:hostname] %>/fpm_status"
+  Exec "<%= node[:nginx][:user] %>" "<%= node[:rightscale][:collectd_lib] %>/plugins/php-fpm" "-d" "<%= node[:rightscale][:instance_uuid] %>" "-n" 10 "-u" "http://localhost:88/fpm_status"
 </Plugin>
